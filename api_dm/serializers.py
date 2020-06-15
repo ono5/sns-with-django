@@ -21,7 +21,6 @@ class MessageSerializer(serializers.ModelSerializer):
     # 友達申請が許可されたもののみに限定
     receiver = FriendRequest()
 
-
     class Meta:
         model = Message
         fields = ('id', 'sender', 'receiver', 'message')

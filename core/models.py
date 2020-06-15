@@ -45,7 +45,6 @@ def upload_path(instance, filename):
     return '/'.join(['image'], str(instance.user_pro.id) + str(instance.nick_name) + str('.') + str(ext))
 
 
-
 class Profile(models.Model):
     nick_name = models.CharField(max_length=20)
     user_pro = models.OneToOneField(
