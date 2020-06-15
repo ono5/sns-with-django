@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
+from core.custom_permisstions import ProfilePermission
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -38,3 +39,27 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         response = {'message': 'Patch is not allowed!'}
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = serializers.ProfileSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, ProfilePermission,)
+
+    def perform_create(self, serializer):
+        serializer.save(user_pro=self.request.user)
+
+
+class MyProfileListView(generics.ListAPIView):
+
+    queryset = Profile.objects.all()
+    serializer_class = serializers.ProfileSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset.filter(user_pro=self.request.user)
+
+
+
