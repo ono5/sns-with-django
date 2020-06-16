@@ -11,7 +11,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = serializers.MessageSerializer
     authentication_classes = (authentication.TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return self.queryset.filter(sender=self.request.user)
@@ -36,7 +36,7 @@ class InboxListView(viewsets.ReadOnlyModelViewSet):
     queryset = Message.objects.all()
     serializer_class = serializers.MessageSerializer
     authentication_classes = (authentication.TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return self.queryset.filter(receiver=self.request.user)

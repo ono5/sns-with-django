@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 def upload_path(instance, filename):
     # 拡張子を取り出す
     ext = filename.split('.')[-1]
-    return '/'.join(['image'], str(instance.user_pro.id) + str(instance.nick_name) + str('.') + str(ext))
+    return '/'.join(['image', str(instance.user_pro.id) + str(instance.nick_name) + str('.') + str(ext)])
 
 
 class Profile(models.Model):
