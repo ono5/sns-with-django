@@ -32,4 +32,4 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
         fields = ('id', 'ask_from', 'ask_to', 'approved')
-        extra_kwargs = {'ask_from', {'read_only': True}}
+        extra_kwargs = {'ask_from': {'read_only': True}}

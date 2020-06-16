@@ -24,4 +24,4 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('id', 'sender', 'receiver', 'message')
-        extra_kwargs = {'sender', {'read_only': True}}
+        extra_kwargs = {'sender': {'read_only': True}}
