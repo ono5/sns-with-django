@@ -4,6 +4,7 @@ import './App.css';
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import indigo from '@material-ui/core/colors/indigo'
+import Navbar from './components/Navbar';
 
 const theme = createMuiTheme({
   palette: {
@@ -21,7 +22,7 @@ const theme = createMuiTheme({
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-
+      <Navbar />
     </MuiThemeProvider>
   );
 }
