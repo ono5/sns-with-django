@@ -8,6 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+    START_FETCH,
+    FETCH_SUCCESS,
+    ERROR_CATCHED,
+    INPUT_EDIT,
+    TOGGLE_MODE,
+} from './actionTypes';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,12 +49,62 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const initialState = {
+    isLoading: false,
+    isLoginView: true,
+    error: '',
+    credentialsLog: {
+        username: '',
+        password: ''
+    },
+    credentialsReg: {
+        email: '',
+        password: ''
+    }
+}
+
+const loginReducer = (state, action) => {
+    switch (action.type) {
+        case START_FETCH: {
+            return {
+                ...state,
+                isLoading: true,
+            }
+        }
+        case FETCH_SUCCESS: {
+            return {
+                ...state,
+                isLoading: false,
+            }
+        }
+        case ERROR_CATCHED: {
+            return {
+                ...state,
+                error: 'Email or Password is not correct!',
+                isLoading: false
+            }
+        }
+        case INPUT_EDIT: {
+            return {
+                ...state,
+                [action.inputName]: action.payload,
+                error: '',
+            }
+        }
+        case TOGGLE_MODE: {
+            return {
+                ...state,
+                isLoginView: !state.isLoginView,
+            }
+        }
+    }
+}
 
 // https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
 
 const Login = () => {
     const classes = useStyles();
-
+    const [state, dispatch] = useReducer(loginReducer, initialState);
     return (
         <div>
             Hello
