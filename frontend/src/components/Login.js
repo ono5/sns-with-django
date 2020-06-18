@@ -102,9 +102,62 @@ const loginReducer = (state, action) => {
 
 // https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
 
-const Login = () => {
+const Login = (props) => {
     const classes = useStyles();
     const [state, dispatch] = useReducer(loginReducer, initialState);
+
+    const inputChangedLog = () => event => {
+        const cred = state.credentialsLog;
+        cred[event.target.name] = event.target.value;
+        console.log({cred})
+        dispatch({
+            type: INPUT_EDIT,
+            inputName: 'state.credentialLog',
+            payload: cred,
+        })
+    }
+
+    const inputChangedReg = () => event => {
+        const cred = state.credentialsReg;
+        cred[event.target.name] = event.target.value;
+        console.log({cred})
+        dispatch({
+            type: INPUT_EDIT,
+            inputName: 'state.credentialReg',
+            payload: cred,
+        })
+    }
+
+    const login = async(event) => {
+        event.preventDefault()
+        if(state.isLoginView) {
+            try {
+                dispatch({type: START_FETCH})
+                const res = await axios.post ('http://127.0.0.1:8000/authen/', state.credentialsLog, {
+                    headers: {'Content-Type': 'application/json'}})
+                    props.cookies.set('current-token', res.data.token)
+                    res.data.token ? window.location.href = '/profiles': window.location.href = '/'
+                    dispatch({type: FETCH_SUCCESS})
+            } catch {
+                dispatch({type: ERROR_CATCHED})
+            }
+        } else {
+            try {
+                dispatch({type: START_FETCH})
+                const res = await axios.post ('http://127.0.0.1:8000/user/create/', state.credentialsReg, {
+                    headers: {'Content-Type': 'application/json'}})
+                    dispatch({type: FETCH_SUCCESS})
+                    dispatch({type: TOGGLE_MODE})
+            } catch {
+                dispatch({type: ERROR_CATCHED})
+            }
+        }
+    }
+
+    const toggleView = () => {
+        dispatch({type: TOGGLE_MODE})
+    }
+
     return (
         <div>
             Hello
