@@ -15,6 +15,7 @@ import {
     INPUT_EDIT,
     TOGGLE_MODE,
 } from './actionTypes';
+import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
       color: 'teal',
     },
-    span: {
+    spanError: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -144,7 +145,7 @@ const Login = (props) => {
         } else {
             try {
                 dispatch({type: START_FETCH})
-                const res = await axios.post ('http://127.0.0.1:8000/user/create/', state.credentialsReg, {
+                await axios.post ('http://127.0.0.1:8000/api/user/create/', state.credentialsReg, {
                     headers: {'Content-Type': 'application/json'}})
                     dispatch({type: FETCH_SUCCESS})
                     dispatch({type: TOGGLE_MODE})
@@ -160,9 +161,112 @@ const Login = (props) => {
 
     return (
         <div>
-            Hello
+            <Container maxWidth="xs">
+                <form onSubmit={login}>
+                    <div className={classes.paper}>
+                        {state.isLoading && <CircularProgress />}
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography variant="h5">
+                            {state.isLoginView ? 'Login' : 'Register'}
+                        </Typography>
+                        { state.isLoginView ?
+                          <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Email"
+                            name="username"
+                            value={state.credentialsLog.username}
+                            onChange={inputChangedLog()}
+                            autoFocus /> :
+
+                          <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Email"
+                            name="email"
+                            value={state.credentialsReg.email}
+                            onChange={inputChangedReg()}
+                            autoFocus />
+                        }
+
+                        { state.isLoginView ?
+                          <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Password"
+                            name="password"
+                            type="password"
+                            value={state.credentialsLog.password}
+                            onChange={inputChangedLog()}/> :
+
+                          <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Password"
+                            name="password"
+                            type="password"
+                            value={state.credentialsReg.password}
+                            onChange={inputChangedReg()}/>
+                        }
+
+                        {/* Error Area */}
+                        <span className={classes.spanError}>{state.error}</span>
+
+                        { state.isLoginView ?
+                            !state.credentialsLog.password || !state.credentialsLog.username ?
+                            <Button
+                              className={classes.submit}
+                              type="submit"
+                              fullWidth
+                              disabled
+                              variant="contained"
+                              color="primary">
+                                  Login
+                            </Button>
+                            :
+                            <Button
+                              className={classes.submit}
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              color="primary">
+                                  Login
+                            </Button>
+                        :
+                            !state.credentialsReg.password || !state.credentialsReg.email ?
+                            <Button
+                              className={classes.submit}
+                              type="submit"
+                              fullWidth
+                              disabled
+                              variant="contained"
+                              color="primary">
+                                  Register
+                            </Button>
+                            :
+                            <Button
+                              className={classes.submit}
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              color="primary">
+                                  Register
+                            </Button>
+                        }
+                        <span onClick={() => toggleView()} className={classes.span}>
+                            {state.isLoginView ? 'Create Account ?' : 'Back to Login ?'}
+                        </span>
+                    </div>
+                </form>
+            </Container>
         </div>
     )
 }
 
-export default Login
+export default withCookies(Login)

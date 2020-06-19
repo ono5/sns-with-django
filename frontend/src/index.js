@@ -12,7 +12,7 @@ const routing = (
     <BrowserRouter>
       <CookiesProvider>
           <Route exact path="/" component={Login} />
-          <Route exact path="/profile" component={App} />
+          <Route exact path="/profiles" component={App} />
 
       </CookiesProvider>
     </BrowserRouter>
